@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demok8s-3
+  namespace: exercise2
+  labels:
+    k8s-app: demok8s-3
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      k8s-app: demok8s-3
+  template:
+    metadata:
+      labels:
+        k8s-app: demok8s-3
+    spec:
+      containers:
+      - name: demok8s-3
+        image: ningweizhou/app
+        ports:
+        - containerPort: 5000

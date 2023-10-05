@@ -1,0 +1,120 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: exercise2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: exercise2
+spec:
+  selector:
+    name: redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: exercise2
+  labels:
+    name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: redis
+  template:
+    metadata:
+      labels:
+        name: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:alpine
+        ports:
+        - containerPort: 6379
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  namespace: exercise2
+spec:
+  selector:
+    name: mongo
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+  namespace: exercise2
+  labels:
+    name: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: mongo
+  template:
+    metadata:
+      labels:
+        name: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:3.4
+        ports:
+        - containerPort: 27017
+---        
+apiVersion: v1
+kind: Service
+metadata:
+  name: messageapp
+  namespace: exercise2
+spec:
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  selector:
+    name: messageapp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: messageapp
+  namespace: exercise2
+  labels:
+    name: messageapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: messageapp
+  template:
+    metadata:
+      labels:
+        name: messageapp
+    spec:
+      containers:
+      - name: messageapp
+        image: angelsevillacamins/message-app:v0.2
+        ports:
+        - containerPort: 80
+        env:
+        - name: MONGO_URL
+          value: "mongodb://mongo/messageApp"
+        - name: REDIS_HOST
+          value: "redis"
+        - name: PORT
+          value: "80"
