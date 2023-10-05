@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: asevilla 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: asevilla
+  template:
+    metadata:
+      labels:
+        app: asevilla 
+    spec:
+      containers:
+        - name: asevilla 
+          image: itvitaecontainerregistry.azurecr.io/asevilla
+          ports:
+          - containerPort: 5000

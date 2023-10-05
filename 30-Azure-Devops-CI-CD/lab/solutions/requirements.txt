@@ -1,0 +1,7 @@
+# Set versions
+flask
+pytest
+pytest-cov
+black
+flake8
+isort

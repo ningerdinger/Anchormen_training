@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: ningweizhou 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ningweizhou
+  template:
+    metadata:
+      labels:
+        app: ningweizhou 
+    spec:
+      containers:
+        - name: ningweizhou 
+          image: itvitaecontainerregistry.azurecr.io/ningweizhou
+          ports:
+          - containerPort: 5000
